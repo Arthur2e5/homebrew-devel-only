@@ -140,6 +140,10 @@ class WineStaging < Formula
     (share/'applications').rmtree
   end
 
+  test do
+    system "#{bin}/wine", "cmd", "/C", "exit 0"
+  end
+
   def caveats
     s = <<-EOS.undent
       You may want to get winetricks:
