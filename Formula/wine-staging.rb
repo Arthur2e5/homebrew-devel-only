@@ -21,7 +21,7 @@ class WineStaging < Formula
   end
 
   head do
-    url "git://github.com/wine-compholio/wine-patched/wine.git"
+    url "https://github.com/wine-compholio/wine-patched/wine.git"
 
     option "with-win64", "Build with win64 emulator (won't run 32-bit binaries.)"
   end
