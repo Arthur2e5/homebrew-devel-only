@@ -7,8 +7,8 @@
 class WineStaging < Formula
   desc "Patched wine with new bug fixes and features that are not yet merged upstream."
   homepage "https://wine-staging.com/"
-  url 'https://github.com/wine-compholio/wine-patched/archive/staging-1.7.45.tar.gz'
-  sha256 'cd2767ce64071c6662e9c421b0b772d080b88c7a4ce00c0f7db5fe70e5f3f628'
+  url "https://github.com/wine-compholio/wine-patched/archive/staging-1.7.45.tar.gz"
+  sha256 "cd2767ce64071c6662e9c421b0b772d080b88c7a4ce00c0f7db5fe70e5f3f628"
 
   option "without-gecko", "Let wine download wine-gecko for iexplore emulation itself."
   option "without-mono", "Let wine download wine-mono for .NET programs itself."
@@ -35,33 +35,33 @@ class WineStaging < Formula
   # Wine will build both the Mac and the X11 driver by default, and you can switch
   # between them. But if you really want to build without X11, you can.
   depends_on :x11 => :recommended
-  depends_on 'pkg-config' => :build
-  depends_on 'freetype'
-  depends_on 'jpeg'
-  depends_on 'libgphoto2'
-  depends_on 'little-cms2'
-  depends_on 'libicns'
-  depends_on 'libtiff'
-  depends_on 'sane-backends'
-  depends_on 'libgsm' => :optional
+  depends_on "pkg-config" => :build
+  depends_on "freetype"
+  depends_on "jpeg"
+  depends_on "libgphoto2"
+  depends_on "little-cms2"
+  depends_on "libicns"
+  depends_on "libtiff"
+  depends_on "sane-backends"
+  depends_on "libgsm" => :optional
   # devel dependencies:
   depends_on "samba" => :optional
   depends_on "gnutls"
   conflicts_with "wine", :because => "wine-staging shares all filenames with wine."
 
-  resource 'gecko' do
+  resource "gecko" do
     url "https://downloads.sourceforge.net/wine/wine_gecko-2.36-x86.msi", :using => :nounzip
     sha256 "afa457ce8f9885225b6e549dd6f154713ce15bf063c23e38c1327d2f869e128a"
   end
 
-  resource 'mono' do
+  resource "mono" do
     url "https://downloads.sourceforge.net/wine/wine-mono-4.5.6.msi", :using => :nounzip
     sha256 "ac681f737f83742d786706529eb85f4bc8d6bdddd8dcdfa9e2e336b71973bc25"
   end
 
   fails_with :llvm do
     build 2336
-    cause 'llvm-gcc does not respect force_align_arg_pointer'
+    cause "llvm-gcc does not respect force_align_arg_pointer"
   end
 
   fails_with :clang do
@@ -79,8 +79,8 @@ class WineStaging < Formula
 
   def library_path
     paths = %W[#{HOMEBREW_PREFIX}/lib /usr/lib]
-    paths.unshift(MacOS::X11.lib) if build.with? 'x11'
-    paths.join(':')
+    paths.unshift(MacOS::X11.lib) if build.with? "x11"
+    paths.join(":")
   end
 
   def wine_wrapper; <<-EOS.undent
@@ -102,7 +102,7 @@ class WineStaging < Formula
     # 64-bit builds of mpg123 are incompatible with 32-bit builds of Wine
     args << "--without-mpg123" if Hardware.is_64_bit?
 
-    args << "--without-x" if build.without? 'x11'
+    args << "--without-x" if build.without? "x11"
 
     system "./configure", *args
 
@@ -128,16 +128,16 @@ class WineStaging < Formula
     end
 
     system "make", "install"
-    (share/'wine/gecko').install resource('gecko') if build.with? "gecko"
-    (share/'wine/mono').install resource('mono') if build.with? "mono"
+    (share/"wine/gecko").install resource("gecko") if build.with? "gecko"
+    (share/"wine/mono").install resource("mono") if build.with? "mono"
 
     # Use a wrapper script, so rename wine to wine.bin
     # and name our startup script wine
-    mv bin/'wine', bin/'wine.bin'
-    (bin/'wine').write(wine_wrapper)
+    mv bin/"wine", bin/"wine.bin"
+    (bin/"wine").write(wine_wrapper)
 
     # Don't need Gnome desktop support
-    (share/'applications').rmtree
+    (share/"applications").rmtree
   end
 
   test do
@@ -156,7 +156,7 @@ class WineStaging < Formula
         https://bugs.winehq.org/show_bug.cgi?id=31374
     EOS
 
-    if build.with? 'x11'
+    if build.with? "x11"
       s += <<-EOS.undent
 
         By default Wine uses a native Mac driver. To switch to the X11 driver, use
