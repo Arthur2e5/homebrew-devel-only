@@ -1,27 +1,17 @@
-require 'formula'
-
 # NOTE: When updating Wine, please check Wine-Gecko and Wine-Mono for updates
 # too:
 #  - http://wiki.winehq.org/Gecko
 #  - http://wiki.winehq.org/Mono
 # NOTE: wine-patched is a devel version of wine with all the wine-staging patches.
-#       Therefore, this Formula is mostly a variant of the devel-do part of wine.
+#  Therefore, this Formula is mostly a variant of the devel-do part of wine.
 class WineStaging < Formula
-  desc "A patched wine version containing bug fixes and features that are not yet available upstream. "
-  homepage 'https://wine-staging.com/'
+  desc "Patched wine with new bug fixes and features that are not yet merged upstream."
+  homepage "https://wine-staging.com/"
   url 'https://github.com/wine-compholio/wine-patched/archive/staging-1.7.45.tar.gz'
   sha256 'cd2767ce64071c6662e9c421b0b772d080b88c7a4ce00c0f7db5fe70e5f3f628'
-  conflicts_with "wine", :because => "wine-staging shares all filenames with wine."
 
-  resource 'gecko' do
-    url 'https://downloads.sourceforge.net/wine/wine_gecko-2.36-x86.msi', :using => :nounzip
-    sha256 'afa457ce8f9885225b6e549dd6f154713ce15bf063c23e38c1327d2f869e128a'
-  end
-
-  resource 'mono' do
-    url 'https://downloads.sourceforge.net/wine/wine-mono-4.5.6.msi', :using => :nounzip
-    sha256 'ac681f737f83742d786706529eb85f4bc8d6bdddd8dcdfa9e2e336b71973bc25'
-  end
+  option "without-gecko", "Let wine download wine-gecko for iexplore emulation itself."
+  option "without-mono", "Let wine download wine-mono for .NET programs itself."
 
   # Patch to fix screen-flickering issues. Still relevant on 1.7.23.
   # https://bugs.winehq.org/show_bug.cgi?id=34166
@@ -32,8 +22,8 @@ class WineStaging < Formula
 
   head do
     url "git://github.com/wine-compholio/wine-patched/wine.git"
-    option "with-win64",
-           "Build with win64 emulator (won't run 32-bit binaries.)"
+
+    option "with-win64", "Build with win64 emulator (won't run 32-bit binaries.)"
   end
 
   # note that all wine dependencies should declare a --universal option in their formula,
@@ -57,6 +47,7 @@ class WineStaging < Formula
   # devel dependencies:
   depends_on "samba" => :optional
   depends_on "gnutls"
+  conflicts_with "wine", :because => "wine-staging shares all filenames with wine."
 
   resource 'gecko' do
     url "https://downloads.sourceforge.net/wine/wine_gecko-2.36-x86.msi", :using => :nounzip
@@ -136,9 +127,9 @@ class WineStaging < Formula
       end
     end
 
-    system "make install"
-    (share/'wine/gecko').install resource('gecko')
-    (share/'wine/mono').install resource('mono')
+    system "make", "install"
+    (share/'wine/gecko').install resource('gecko') if build.with? "gecko"
+    (share/'wine/mono').install resource('mono') if build.with? "mono"
 
     # Use a wrapper script, so rename wine to wine.bin
     # and name our startup script wine
