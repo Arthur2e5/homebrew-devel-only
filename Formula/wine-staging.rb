@@ -7,8 +7,8 @@
 class WineStaging < Formula
   desc "Patched wine with new, unoffical bug fixes and features."
   homepage "https://wine-staging.com/"
-  url "https://github.com/wine-compholio/wine-patched/archive/staging-1.7.45.tar.gz"
-  sha256 "cd2767ce64071c6662e9c421b0b772d080b88c7a4ce00c0f7db5fe70e5f3f628"
+  url "https://github.com/wine-compholio/wine-patched/archive/staging-1.7.49.tar.gz"
+  sha256 "4c6880c0551fb5f70895f0e149fc26ae3760b0f1c0f9077c0c1e8d02436e7006"
 
   # Patch to fix screen-flickering issues. Still relevant on 1.7.23.
   # https://bugs.winehq.org/show_bug.cgi?id=34166
