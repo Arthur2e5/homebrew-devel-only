@@ -5,7 +5,7 @@
 # NOTE: wine-patched is a devel version of wine with all the wine-staging patches.
 #  Therefore, this Formula is mostly a variant of the devel-do part of wine.
 class WineStaging < Formula
-  desc "Patched wine with new, unoffical bug fixes and features."
+  desc "Unofficially patched WINE."
   homepage "https://wine-staging.com/"
   url "https://github.com/wine-compholio/wine-patched/archive/staging-1.7.49.tar.gz"
   sha256 "4c6880c0551fb5f70895f0e149fc26ae3760b0f1c0f9077c0c1e8d02436e7006"
