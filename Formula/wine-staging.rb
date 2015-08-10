@@ -29,6 +29,9 @@ class WineStaging < Formula
     MacOS.prefer_64_bit?
   end
 
+  option "without-gecko", "Let wine download wine-gecko for iexplore emulation itself."
+  option "without-mono", "Let wine download wine-mono for .NET programs itself."
+
   # Wine will build both the Mac and the X11 driver by default, and you can switch
   # between them. But if you really want to build without X11, you can.
   depends_on :x11 => :recommended
@@ -45,9 +48,6 @@ class WineStaging < Formula
   depends_on "samba" => :optional
   depends_on "gnutls"
   conflicts_with "wine", :because => "wine-staging shares all filenames with wine."
-
-  option "without-gecko", "Let wine download wine-gecko for iexplore emulation itself."
-  option "without-mono", "Let wine download wine-mono for .NET programs itself."
 
   resource "gecko" do
     url "https://downloads.sourceforge.net/wine/wine_gecko-2.36-x86.msi", :using => :nounzip
@@ -113,7 +113,8 @@ class WineStaging < Formula
       inreplace "dlls/winemac.drv/Makefile" do |s|
         # We need to use the real compiler, not the superenv shim, which will exec the
         # configured compiler no matter what name is used to invoke it.
-        cc, cxx = s.get_make_var("CC"), s.get_make_var("CXX")
+        cc = s.get_make_var("CC")
+        cxx = s.get_make_var("CXX")
         s.change_make_var! "CC", cc.sub(ENV.cc, "xcrun clang") if cc
         s.change_make_var! "CXX", cc.sub(ENV.cxx, "xcrun clang++") if cxx
 
@@ -163,9 +164,8 @@ class WineStaging < Formula
           https://xquartz.macosforge.org/
       EOS
     end
-    return s
   end
-  
+ 
   test do
     system "#{bin}/wine", "cmd", "/C", "exit 0"
   end
