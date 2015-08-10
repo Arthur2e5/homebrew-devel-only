@@ -165,7 +165,7 @@ class WineStaging < Formula
       EOS
     end
   end
- 
+
   test do
     system "#{bin}/wine", "cmd", "/C", "exit 0"
   end
