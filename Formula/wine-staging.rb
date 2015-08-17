@@ -120,7 +120,7 @@ class WineStaging < Formula
 
         # Emulate some things that superenv would normally handle for us
         # We're configured to use GNU GCC, so remote an unsupported flag
-        s.gsub! "-gstabs+", ""
+        s.gsub! "-gstabs+", "" if build.stable?
         # Pass the sysroot to support Xcode-only systems
         cflags  = s.get_make_var("CFLAGS")
         cflags += " --sysroot=#{MacOS.sdk_path}"
@@ -163,6 +163,7 @@ class WineStaging < Formula
         For best results with X11, install the latest version of XQuartz:
           https://xquartz.macosforge.org/
       EOS
+    s
     end
   end
 
