@@ -163,7 +163,7 @@ class WineStaging < Formula
         For best results with X11, install the latest version of XQuartz:
           https://xquartz.macosforge.org/
       EOS
-    s
+      s
     end
   end
 
